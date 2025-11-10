@@ -3,6 +3,8 @@ package com.salvalivros.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Table(name = "livro")
 @Entity
 @Data
@@ -20,8 +22,8 @@ public class Livro {
 
     private String isbn;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
 }

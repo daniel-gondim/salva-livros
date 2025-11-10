@@ -26,4 +26,5 @@ public class Livro {
 
     private LocalDateTime updatedAt;
 
+    private String categoria;
 }

@@ -1,17 +1,13 @@
 package com.salvalivros.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.sql.Timestamp;
+import lombok.Data;
 
 @Table(name = "livro")
 @Entity
+@Data
 public class Livro {
 
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

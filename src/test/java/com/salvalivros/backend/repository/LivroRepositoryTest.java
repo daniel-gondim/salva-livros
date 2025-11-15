@@ -1,6 +1,7 @@
 package com.salvalivros.backend.repository;
 
 import com.salvalivros.backend.model.Livro;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,11 @@ class LivroRepositoryTest {
 
     @Autowired
     LivroRepository livroRepository;
+
+    @BeforeEach
+    void limpaBanco() {
+        livroRepository.deleteAll();
+    }
 
     private Livro criaLivro() {
         Livro livro = new Livro();
@@ -46,7 +52,7 @@ class LivroRepositoryTest {
         assert livroEncontrado.isPresent();
 
         Livro encontrado = livroEncontrado.get();
-        assertEquals("Autor Teste", encontrado.getTitulo());
+        assertEquals("Título Teste", encontrado.getTitulo());
     }
 
     @Test

@@ -70,4 +70,11 @@ class LivroRepositoryTest {
         assertEquals("Categoria Teste", listaLivros.get(1).getCategoria());
         assertEquals("Título Teste", listaLivros.get(2).getTitulo());
     }
+
+    @Test
+    void deveAtualizarLivro() {
+        Livro livro = criaLivro();
+        livro.setTitulo("Autor Alterado");
+        assertEquals("Autor Alterado", livro.getTitulo());
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,8 +22,12 @@ class LivroRepositoryTest {
         livro.setCategoria("Categoria Teste");
         livro.setTitulo("Autor Teste");
         livro.setEditora("Editora Teste");
-        livro.setIsbn("12313132121231");
+        livro.setIsbn(geraIsbnUnico());
         return livro;
+    }
+
+    private String geraIsbnUnico() {
+        return UUID.randomUUID().toString();
     }
 
     @Test

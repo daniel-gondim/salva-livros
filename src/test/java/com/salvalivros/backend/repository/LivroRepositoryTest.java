@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ class LivroRepositoryTest {
         Livro livro = new Livro();
         livro.setAutor("Autor");
         livro.setCategoria("Categoria Teste");
-        livro.setTitulo("Autor Teste");
+        livro.setTitulo("Título Teste");
         livro.setEditora("Editora Teste");
         livro.setIsbn(geraIsbnUnico());
         return livro;
@@ -46,5 +47,21 @@ class LivroRepositoryTest {
 
         Livro encontrado = livroEncontrado.get();
         assertEquals("Autor Teste", encontrado.getTitulo());
+    }
+
+    @Test
+    void deveListarTodosOsLivros() {
+        livroRepository.deleteAll();
+        Livro livro1 = criaLivro();
+        Livro livro2 = criaLivro();
+        Livro livro3 = criaLivro();
+        livroRepository.save(livro1);
+        livroRepository.save(livro2);
+        livroRepository.save(livro3);
+        assertEquals(3, livroRepository.count());
+        List<Livro> listaLivros = livroRepository.findAll();
+        assertEquals("Autor", listaLivros.get(0).getAutor());
+        assertEquals("Categoria Teste", listaLivros.get(1).getCategoria());
+        assertEquals("Título Teste", listaLivros.get(2).getTitulo());
     }
 }

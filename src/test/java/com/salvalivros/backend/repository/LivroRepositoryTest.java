@@ -77,4 +77,12 @@ class LivroRepositoryTest {
         livro.setTitulo("Autor Alterado");
         assertEquals("Autor Alterado", livro.getTitulo());
     }
+
+    @Test
+    void deletaLivro() {
+        Livro livro = criaLivro();
+        livroRepository.save(livro);
+        livroRepository.delete(livro);
+        assertEquals(0,livroRepository.count());
+    }
 }

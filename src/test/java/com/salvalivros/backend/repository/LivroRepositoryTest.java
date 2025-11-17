@@ -44,7 +44,7 @@ class LivroRepositoryTest {
     void deveSalvarLivro() {
         Livro livro = criaLivro();
         livroRepository.save(livro);
-        assert livro.getId() != null;
+        assertNotNull(livro.getId());
     }
 
     @Test

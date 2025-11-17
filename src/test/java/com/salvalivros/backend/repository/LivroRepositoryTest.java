@@ -23,11 +23,14 @@ class LivroRepositoryTest {
         livroRepository.deleteAll();
     }
 
+    private static final String AUTOR_PADRAO = "Autor";
+    private static final String TITULO_PADRAO = "Título Teste";
+
     private Livro criaLivro() {
         Livro livro = new Livro();
-        livro.setAutor("Autor");
+        livro.setAutor(AUTOR_PADRAO);
         livro.setCategoria("Categoria Teste");
-        livro.setTitulo("Título Teste");
+        livro.setTitulo(TITULO_PADRAO);
         livro.setEditora("Editora Teste");
         livro.setIsbn(geraIsbnUnico());
         return livro;
@@ -52,7 +55,7 @@ class LivroRepositoryTest {
         assert livroEncontrado.isPresent();
 
         Livro encontrado = livroEncontrado.get();
-        assertEquals("Título Teste", encontrado.getTitulo());
+        assertEquals(TITULO_PADRAO, encontrado.getTitulo());
     }
 
     @Test
@@ -66,9 +69,9 @@ class LivroRepositoryTest {
         livroRepository.save(livro3);
         assertEquals(3, livroRepository.count());
         List<Livro> listaLivros = livroRepository.findAll();
-        assertEquals("Autor", listaLivros.get(0).getAutor());
+        assertEquals(AUTOR_PADRAO, listaLivros.get(0).getAutor());
         assertEquals("Categoria Teste", listaLivros.get(1).getCategoria());
-        assertEquals("Título Teste", listaLivros.get(2).getTitulo());
+        assertEquals(TITULO_PADRAO, listaLivros.get(2).getTitulo());
     }
 
     @Test

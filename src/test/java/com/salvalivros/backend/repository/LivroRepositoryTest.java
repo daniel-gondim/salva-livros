@@ -75,8 +75,12 @@ class LivroRepositoryTest {
     @Test
     void deveAtualizarLivro() {
         Livro livro = criaLivro();
+        livroRepository.save(livro);
         livro.setTitulo("Autor Alterado");
-        assertEquals("Autor Alterado", livro.getTitulo());
+        livroRepository.save(livro);
+        Optional<Livro> livroEncontrado = livroRepository.findById(livro.getId());
+        assertTrue(livroEncontrado.isPresent());
+        assertEquals("Autor Alterado", livroEncontrado.get().getTitulo());
     }
 
     @Test

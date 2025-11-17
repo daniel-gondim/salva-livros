@@ -52,10 +52,8 @@ class LivroRepositoryTest {
         Livro livro = criaLivro();
         livroRepository.save(livro);
         Optional<Livro> livroEncontrado = livroRepository.findById(livro.getId());
-        assert livroEncontrado.isPresent();
-
-        Livro encontrado = livroEncontrado.get();
-        assertEquals(TITULO_PADRAO, encontrado.getTitulo());
+        assertTrue(livroEncontrado.isPresent());
+        assertEquals(TITULO_PADRAO, livroEncontrado.get().getTitulo());
     }
 
     @Test

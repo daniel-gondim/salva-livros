@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class LivroRepositoryTest {
@@ -79,10 +79,12 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void deletaLivro() {
+    void deveDeletarLivro() {
         Livro livro = criaLivro();
         livroRepository.save(livro);
         livroRepository.delete(livro);
-        assertEquals(0,livroRepository.count());
+        assertEquals(0, livroRepository.count());
+        Optional<Livro> livroEncontrado = livroRepository.findById(livro.getId());
+        assertTrue(livroEncontrado.isEmpty());
     }
 }

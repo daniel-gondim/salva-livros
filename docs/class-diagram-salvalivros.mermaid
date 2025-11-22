@@ -1,0 +1,75 @@
+classDiagram
+    direction TB
+    
+    class Livro {
+        -Long id
+        -String titulo
+        -String autor
+        -String categoria
+        -String editora
+        -String isbn
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +getId() Long
+        +setId(Long) void
+        +getTitulo() String
+        +setTitulo(String) void
+    }
+    
+    class LivroRequest {
+        -String titulo
+        -String autor
+        -String categoria
+        -String editora
+        -String isbn
+        +getTitulo() String
+        +setTitulo(String) void
+    }
+    
+    class LivroResponse {
+        -Long id
+        -String titulo
+        -String autor
+        -String categoria
+        -String editora
+        -String isbn
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+        +getId() Long
+        +getTitulo() String
+    }
+    
+    class LivroRepository {
+        <<interface>>
+        +save(Livro) Livro
+        +findById(Long) Optional~Livro~
+        +findAll() List~Livro~
+        +delete(Livro) void
+        +deleteById(Long) void
+        +count() Long
+    }
+    
+    class LivroService {
+        -LivroRepository repository
+        +criar(LivroRequest) LivroResponse
+        +buscarPorId(Long) LivroResponse
+        +listarTodos() List~LivroResponse~
+        +atualizar(Long, LivroRequest) LivroResponse
+        +deletar(Long) void
+    }
+    
+    class LivroController {
+        -LivroService service
+        +criar(LivroRequest) ResponseEntity
+        +buscarPorId(Long) ResponseEntity
+        +listarTodos() ResponseEntity
+        +atualizar(Long, LivroRequest) ResponseEntity
+        +deletar(Long) ResponseEntity
+    }
+    
+    LivroController --> LivroService : usa
+    LivroService --> LivroRepository : usa
+    LivroRepository --> Livro : persiste
+    LivroService --> LivroRequest : recebe
+    LivroService --> LivroResponse : retorna
+    LivroService --> Livro : converte

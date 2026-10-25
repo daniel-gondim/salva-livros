@@ -2,6 +2,8 @@ package com.salvalivros.backend.service;
 
 import java.util.List;
 
+import com.salvalivros.backend.dto.LivroRequest;
+import com.salvalivros.backend.dto.LivroResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,25 @@ public class LivroService {
     @Autowired
     private LivroRepository livroRepository;
 
-    private Livro salvarLivro(Livro livro) {    
-        return livroRepository.save(livro); 
-    }   
+    public LivroResponse salvarLivro(LivroRequest livroRequest) {
+        Livro livro = new Livro();
+        livro.setTitulo(livroRequest.getTitulo());
+        livro.setAutor(livroRequest.getAutor());
+        livro.setCategoria(livroRequest.getCategoria());
+        livro.setEditora(livroRequest.getEditora());
+        livro.setIsbn(livroRequest.getIsbn());
+        Livro livroSalvo = livroRepository.save(livro);
+        LivroResponse livroResponse = new LivroResponse();
+        livroResponse.setTitulo(livroSalvo.getTitulo());
+        livroResponse.setAutor(livroSalvo.getAutor());
+        livroResponse.setCategoria(livroSalvo.getCategoria());
+        livroResponse.setEditora(livroSalvo.getEditora());
+        livroResponse.setIsbn(livroSalvo.getIsbn());
+        livroResponse.setCreatedAt(livroSalvo.getCreatedAt());
+        livroResponse.setUpdatedAt(livroSalvo.getUpdatedAt());
+        livroResponse.setId(livroSalvo.getId());
+        return livroResponse;
+    }
 
     public List<Livro> obterTodasOsLivros() {
         return livroRepository.findAll();

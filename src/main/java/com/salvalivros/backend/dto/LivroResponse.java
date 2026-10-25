@@ -1,7 +1,9 @@
 package com.salvalivros.backend.dto;
-import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
 public class LivroResponse {
 
     private Long id;

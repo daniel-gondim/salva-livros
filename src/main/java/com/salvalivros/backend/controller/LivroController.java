@@ -28,4 +28,5 @@ public class LivroController {
     public List<LivroResponse> listaLivro() {
         return livroService.obterTodasOsLivros();
     }
+    public LivroResponse buscaLivroPorId(@PathVariable Long id) {
 }

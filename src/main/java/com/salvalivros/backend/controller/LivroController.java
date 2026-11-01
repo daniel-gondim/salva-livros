@@ -28,5 +28,9 @@ public class LivroController {
     public List<LivroResponse> listaLivro() {
         return livroService.obterTodasOsLivros();
     }
+
+    @GetMapping("/{id}")
     public LivroResponse buscaLivroPorId(@PathVariable Long id) {
+        return livroService.obterLivroPorId(id);
+    }
 }

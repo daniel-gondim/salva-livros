@@ -1,5 +1,6 @@
 package com.salvalivros.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.salvalivros.backend.dto.LivroRequest;
@@ -43,8 +44,15 @@ public class LivroService {
         return livroResponse;
     }
 
-    public List<Livro> obterTodasOsLivros() {
-        return livroRepository.findAll();
+    public List<LivroResponse> obterTodasOsLivros() {
+        List<Livro> listaLivros = livroRepository.findAll();
+        List<LivroResponse> listaResponse = new ArrayList<>();
+        for (int i = 0; i < listaLivros.size(); i++) {
+            Livro livro = listaLivros.get(i);
+            LivroResponse livroResponse = criaLivroResponse(livro);
+            listaResponse.add(livroResponse);
+        }
+        return listaResponse;
     }
 
     public Livro obterLivroPorId(Long id) {

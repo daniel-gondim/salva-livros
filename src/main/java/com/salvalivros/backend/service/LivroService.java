@@ -2,15 +2,19 @@ package com.salvalivros.backend.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.salvalivros.backend.dto.LivroRequest;
 import com.salvalivros.backend.dto.LivroResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.salvalivros.backend.model.Livro;
 import com.salvalivros.backend.repository.LivroRepository;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class LivroService {
@@ -55,8 +59,14 @@ public class LivroService {
         return listaResponse;
     }
 
-    public Livro obterLivroPorId(Long id) {
-        return livroRepository.findById(id).orElse(null);
+    public LivroResponse obterLivroPorId(Long id) {
+        Optional<Livro> livroEncontrado = livroRepository.findById(id);
+        if(livroEncontrado.isPresent()) {
+            Livro livro = livroEncontrado.get();
+            LivroResponse livroResponse = criaLivroResponse(livro);
+            return livroResponse;
+        }
+        throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrato");
     }
 
     public void deletarLivro(Long id) {

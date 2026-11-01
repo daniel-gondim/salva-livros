@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/livros")
@@ -20,5 +22,10 @@ public class LivroController {
     @ResponseStatus(HttpStatus.CREATED)
     public LivroResponse criaLivro(@Valid @RequestBody LivroRequest livroRequest) {
         return livroService.salvarLivro(livroRequest);
+    }
+
+    @GetMapping()
+    public List<LivroResponse> listaLivro() {
+        return livroService.obterTodasOsLivros();
     }
 }

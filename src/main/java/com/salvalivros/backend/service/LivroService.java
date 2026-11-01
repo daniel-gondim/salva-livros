@@ -5,6 +5,7 @@ import java.util.List;
 import com.salvalivros.backend.dto.LivroRequest;
 import com.salvalivros.backend.dto.LivroResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.salvalivros.backend.model.Livro;
@@ -24,6 +25,12 @@ public class LivroService {
         livro.setEditora(livroRequest.getEditora());
         livro.setIsbn(livroRequest.getIsbn());
         Livro livroSalvo = livroRepository.save(livro);
+        LivroResponse livroResponse = criaLivroResponse(livroSalvo);
+        return livroResponse;
+    }
+
+    @NonNull
+    private static LivroResponse criaLivroResponse(Livro livroSalvo) {
         LivroResponse livroResponse = new LivroResponse();
         livroResponse.setTitulo(livroSalvo.getTitulo());
         livroResponse.setAutor(livroSalvo.getAutor());

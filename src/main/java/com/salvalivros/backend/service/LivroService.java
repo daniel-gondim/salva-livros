@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.salvalivros.backend.model.Livro;
 import com.salvalivros.backend.repository.LivroRepository;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -69,8 +68,30 @@ public class LivroService {
         throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrato");
     }
 
-    public void deletarLivro(Long id) {
-        this.livroRepository.deleteById(id);
+    public LivroResponse deletarLivro(Long id) {
+        Optional<Livro> livroEncontrado = livroRepository.findById(id);
+        if (livroEncontrado.isPresent()) {
+            Livro livro = livroEncontrado.get();
+            LivroResponse livroResponse = criaLivroResponse(livro);
+            livroRepository.delete(livro);
+            return livroResponse;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado");
+    }
+
+    public LivroResponse atualizarLivro(Long id, LivroRequest livroRequest) {
+        Optional<Livro> livroEncontrado = livroRepository.findById(id);
+        if (livroEncontrado.isPresent()) {
+            Livro livro = livroEncontrado.get();
+            livro.setTitulo(livroRequest.getTitulo());
+            livro.setAutor(livroRequest.getAutor());
+            livro.setCategoria(livroRequest.getCategoria());
+            livro.setEditora(livroRequest.getEditora());
+            livro.setIsbn(livroRequest.getIsbn());
+            Livro livroAtualizado = livroRepository.save(livro);
+            return criaLivroResponse(livroAtualizado);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado");
     }
 
 }

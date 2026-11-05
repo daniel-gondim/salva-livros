@@ -33,4 +33,14 @@ public class LivroController {
     public LivroResponse buscaLivroPorId(@PathVariable Long id) {
         return livroService.obterLivroPorId(id);
     }
+
+    @DeleteMapping("/{id}")
+    public LivroResponse deletaLivroPorId(@PathVariable Long id) {
+        return livroService.deletarLivro(id);
+    }
+
+    @PutMapping("/{id}")
+    public LivroResponse atualizaLivroPorId(@PathVariable Long id, @Valid @RequestBody LivroRequest livroRequest) {
+        return livroService.atualizarLivro(id, livroRequest);
+    }
 }

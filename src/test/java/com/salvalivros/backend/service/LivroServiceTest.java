@@ -96,9 +96,9 @@ class LivroServiceTest {
     }
 
     @Test
-    void obterLivroPorId() {
+    void deveObterLivroPorId() {
         LivroRequest livroRequest = new LivroRequest();
-        livroRequest.setAutor("O médico e o monstro");
+        livroRequest.setAutor("Robert Louis Stevenson");
         livroRequest.setTitulo("O médico e o monstro");
         livroRequest.setEditora("Editora 34");
         livroRequest.setCategoria("Clśsico");
@@ -122,7 +122,25 @@ class LivroServiceTest {
     }
 
     @Test
-    void deletarLivro() {
+    void deveDeletarLivro() {
+        LivroRequest livroRequest = new LivroRequest();
+        livroRequest.setAutor("Carl Sagan");
+        livroRequest.setTitulo("Pálido ponto azul");
+        livroRequest.setEditora("Editora");
+        livroRequest.setCategoria("Ciência");
+        livroRequest.setIsbn("9876678900129");
+
+        Livro livro = new Livro();
+        livro.setAutor(livroRequest.getAutor());
+        livro.setTitulo(livroRequest.getTitulo());
+        livro.setCategoria(livroRequest.getCategoria());
+        livro.setEditora(livroRequest.getEditora());
+        livro.setIsbn(livroRequest.getIsbn());
+        Optional<Livro> livroEncontrado = Optional.of(livro);
+        when(livroRepository.findById(any())).thenReturn(livroEncontrado);
+
+        LivroResponse livroResponse = livroService.deletarLivro(50L);
+        assertEquals(livroResponse.getTitulo(), livroRequest.getTitulo());
     }
 
     @Test

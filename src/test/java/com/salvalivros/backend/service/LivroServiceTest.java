@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -96,6 +97,28 @@ class LivroServiceTest {
 
     @Test
     void obterLivroPorId() {
+        LivroRequest livroRequest = new LivroRequest();
+        livroRequest.setAutor("O médico e o monstro");
+        livroRequest.setTitulo("O médico e o monstro");
+        livroRequest.setEditora("Editora 34");
+        livroRequest.setCategoria("Clśsico");
+        livroRequest.setIsbn("1145678900129");
+
+        Livro livro = new Livro();
+        livro.setAutor(livroRequest.getAutor());
+        livro.setTitulo(livroRequest.getTitulo());
+        livro.setCategoria(livroRequest.getCategoria());
+        livro.setEditora(livroRequest.getEditora());
+        livro.setIsbn(livroRequest.getIsbn());
+        Optional<Livro> livroEncontrado = Optional.of(livro);
+        when(livroRepository.findById(any())).thenReturn(livroEncontrado);
+
+        LivroResponse livroResponse = livroService.obterLivroPorId(50L);
+        assertEquals(livroResponse.getTitulo(), livroRequest.getTitulo());
+        assertEquals(livroResponse.getAutor(), livroRequest.getAutor());
+        assertEquals(livroResponse.getCategoria(), livroRequest.getCategoria());
+        assertEquals(livroResponse.getEditora(), livroRequest.getEditora());
+        assertEquals(livroResponse.getIsbn(), livroRequest.getIsbn());
     }
 
     @Test

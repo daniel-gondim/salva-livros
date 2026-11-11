@@ -144,6 +144,42 @@ class LivroServiceTest {
     }
 
     @Test
-    void atualizarLivro() {
+    void deveAtualizarLivro() {
+        LivroRequest livroRequest = new LivroRequest();
+        livroRequest.setAutor("Albert Camus");
+        livroRequest.setTitulo("A peste");
+        livroRequest.setEditora("Record");
+        livroRequest.setCategoria("Clássicos");
+        livroRequest.setIsbn("9876678900000");
+
+        Livro livro = new Livro();
+        livro.setAutor(livroRequest.getAutor());
+        livro.setTitulo(livroRequest.getTitulo());
+        livro.setCategoria(livroRequest.getCategoria());
+        livro.setEditora(livroRequest.getEditora());
+        livro.setIsbn(livroRequest.getIsbn());
+        Optional<Livro> livroEncontrado = Optional.of(livro);
+        when(livroRepository.findById(any())).thenReturn(livroEncontrado);
+
+        LivroRequest livroRequestAtualizado = new LivroRequest();
+        livroRequestAtualizado.setAutor("Albert Camus");
+        livroRequestAtualizado.setTitulo("O estrangeiro");
+        livroRequestAtualizado.setEditora("Record");
+        livroRequestAtualizado.setCategoria("Clássicos");
+        livroRequestAtualizado.setIsbn("9876678900000");
+        Livro livroAtualizado = new Livro();
+        livroAtualizado.setAutor(livroRequestAtualizado.getAutor());
+        livroAtualizado.setTitulo(livroRequestAtualizado.getTitulo());
+        livroAtualizado.setCategoria(livroRequestAtualizado.getCategoria());
+        livroAtualizado.setEditora(livroRequestAtualizado.getEditora());
+        livroAtualizado.setIsbn(livroRequestAtualizado.getIsbn());
+        when(livroRepository.save(any())).thenReturn(livroAtualizado);
+
+        LivroResponse livroResponseAtualizado = livroService.atualizarLivro(80L, livroRequestAtualizado);
+        assertEquals(livroResponseAtualizado.getTitulo(), livroRequestAtualizado.getTitulo());
+        assertEquals(livroResponseAtualizado.getAutor(), livroRequestAtualizado.getAutor());
+        assertEquals(livroResponseAtualizado.getCategoria(), livroRequestAtualizado.getCategoria());
+        assertEquals(livroResponseAtualizado.getEditora(), livroRequestAtualizado.getEditora());
+        assertEquals(livroResponseAtualizado.getIsbn(), livroRequestAtualizado.getIsbn());
     }
 }

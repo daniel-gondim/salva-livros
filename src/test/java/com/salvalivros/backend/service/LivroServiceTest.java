@@ -84,7 +84,7 @@ class LivroServiceTest {
     }
 
     @Test
-    void deveObterLivroPorId() {
+    void deveObterLivroPorIdQuandoExistir() {
         LivroRequest livroRequest = criaLivroRequest();
         Livro livro = criaLivro();
         Optional<Livro> livroEncontrado = Optional.of(livro);
@@ -98,14 +98,29 @@ class LivroServiceTest {
     }
 
     @Test
-    void deveRetornarMensagemDeLivroNaoEncontrado() {
+    void deveLancarExcecaoAoBuscarLivroInexistente() {
         Optional<Livro> livroEncontrado = Optional.empty();
         when(livroRepository.findById(any())).thenReturn(livroEncontrado);
         assertThrows(ResponseStatusException.class, () -> livroService.obterLivroPorId(50L), "Livro não encontrado");
     }
 
     @Test
-    void deveDeletarLivro() {
+    void deveLancarExcecaoAoDeletarLivroInexistente() {
+        Optional<Livro> livroEncontrado = Optional.empty();
+        when(livroRepository.findById(any())).thenReturn(livroEncontrado);
+        assertThrows(ResponseStatusException.class, () -> livroService.deletarLivro(50L), "Livro não encontrado");
+    }
+
+    @Test
+    void deveLançarExcecaoAoAtualizarLivroInexistente() {
+        Optional<Livro> livroEncontrado = Optional.empty();
+        LivroRequest livroRequest = criaLivroRequest();
+        when(livroRepository.findById(any())).thenReturn(livroEncontrado);
+        assertThrows(ResponseStatusException.class, () -> livroService.atualizarLivro(50L, livroRequest), "Livro não encontrado");
+    }
+
+    @Test
+    void deveDeletarLivroQuandoExistir() {
         LivroRequest livroRequest = criaLivroRequest();
         Livro livro = criaLivro();
         Optional<Livro> livroEncontrado = Optional.of(livro);
@@ -116,7 +131,7 @@ class LivroServiceTest {
     }
 
     @Test
-    void deveAtualizarLivro() {
+    void deveAtualizarLivroQuandoExistir() {
         Livro livro = criaLivro();
         Optional<Livro> livroEncontrado = Optional.of(livro);
 

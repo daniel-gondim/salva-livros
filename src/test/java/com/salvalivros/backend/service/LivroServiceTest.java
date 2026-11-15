@@ -112,7 +112,7 @@ class LivroServiceTest {
     }
 
     @Test
-    void deveLançarExcecaoAoAtualizarLivroInexistente() {
+    void deveLancarExcecaoAoAtualizarLivroInexistente() {
         Optional<Livro> livroEncontrado = Optional.empty();
         LivroRequest livroRequest = criaLivroRequest();
         when(livroRepository.findById(any())).thenReturn(livroEncontrado);

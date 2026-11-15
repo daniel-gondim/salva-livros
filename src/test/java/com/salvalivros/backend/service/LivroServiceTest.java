@@ -9,11 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -95,6 +95,13 @@ class LivroServiceTest {
         assertEquals(livroResponse.getAutor(), livroRequest.getAutor());
         assertEquals(livroResponse.getCategoria(), livroRequest.getCategoria());
         assertEquals(livroResponse.getEditora(), livroRequest.getEditora());
+    }
+
+    @Test
+    void deveRetornarMensagemDeLivroNaoEncontrado() {
+        Optional<Livro> livroEncontrado = Optional.empty();
+        when(livroRepository.findById(any())).thenReturn(livroEncontrado);
+        assertThrows(ResponseStatusException.class, () -> livroService.obterLivroPorId(50L), "Livro não encontrado");
     }
 
     @Test

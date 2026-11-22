@@ -4,7 +4,6 @@ import com.salvalivros.backend.dto.LivroResponse;
 import com.salvalivros.backend.service.LivroService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,5 +88,25 @@ class LivroControllerTest {
         when(livroService.obterLivroPorId(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
         mockMvc.perform(get("/livros/1"))
                 .andExpect(status().is(404));
+    }
+
+    @Test
+    void deveAtualizarLivroQuandoDadosValidos() throws Exception{
+        LivroResponse livroResponse = new LivroResponse();
+        livroResponse.setAutor("Machado de Assis");
+        livroResponse.setTitulo("Dom Casmurro");
+        livroResponse.setCategoria("Romance");
+        livroResponse.setEditora("Editora X");
+        livroResponse.setIsbn("1234567890");
+        when(livroService.atualizarLivro(any(), any())).thenReturn(livroResponse);
+        mockMvc.perform(put("/livros/1").contentType(MediaType.APPLICATION_JSON).content("""
+                        {
+                          "titulo": "Dom Casmurro",
+                          "autor": "Machado de Assis",
+                          "categoria": "Romance",
+                          "editora": "Editora X",
+                          "isbn": "1234567890"
+                        }"""))
+                .andExpect(status().isOk());
     }
 }

@@ -4,11 +4,14 @@ import com.salvalivros.backend.dto.LivroResponse;
 import com.salvalivros.backend.service.LivroService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -73,5 +76,19 @@ class LivroControllerTest {
         mockMvc.perform(get("/livros/1"))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.autor").value("Machado de Assis"));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoIdForInexistente() throws Exception {
+        LivroResponse livroResponse = new LivroResponse();
+        livroResponse.setAutor("Machado de Assis");
+        livroResponse.setTitulo("Dom Casmurro");
+        livroResponse.setCategoria("Romance");
+        livroResponse.setEditora("Editora X");
+        livroResponse.setIsbn("1234567890");
+
+        when(livroService.obterLivroPorId(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
+        mockMvc.perform(get("/livros/1"))
+                .andExpect(status().is(404));
     }
 }

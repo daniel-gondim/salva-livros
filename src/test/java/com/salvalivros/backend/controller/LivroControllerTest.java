@@ -46,4 +46,17 @@ class LivroControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.titulo").value("Dom Casmurro"));
     }
+
+    @Test
+    void deveLancarExcecaoQuandoCampoAusente() throws Exception {
+        mockMvc.perform(post("/livros").contentType(MediaType.APPLICATION_JSON).content("""
+                        {
+                          "titulo": "",
+                          "autor": "Machado de Assis",
+                          "categoria": "Romance",
+                          "editora": "Editora X",
+                          "isbn": "1234567890"
+                        }"""))
+                .andExpect(status().isBadRequest());
+    }
 }

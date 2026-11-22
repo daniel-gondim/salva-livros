@@ -3,7 +3,6 @@ package com.salvalivros.backend.controller;
 import com.salvalivros.backend.dto.LivroResponse;
 import com.salvalivros.backend.service.LivroService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,5 +58,20 @@ class LivroControllerTest {
                           "isbn": "1234567890"
                         }"""))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornarLivroQuandoIdForValido() throws Exception {
+        LivroResponse livroResponse = new LivroResponse();
+        livroResponse.setAutor("Machado de Assis");
+        livroResponse.setTitulo("Dom Casmurro");
+        livroResponse.setCategoria("Romance");
+        livroResponse.setEditora("Editora X");
+        livroResponse.setIsbn("1234567890");
+
+        when(livroService.obterLivroPorId(any())).thenReturn(livroResponse);
+        mockMvc.perform(get("/livros/1"))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.autor").value("Machado de Assis"));
     }
 }

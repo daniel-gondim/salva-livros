@@ -109,4 +109,24 @@ class LivroControllerTest {
                         }"""))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void deveLancarExcecaoQuandoIdDeLivroAtualizadoInexistente() throws Exception{
+        LivroResponse livroResponse = new LivroResponse();
+        livroResponse.setAutor("Machado de Assis");
+        livroResponse.setTitulo("Dom Casmurro");
+        livroResponse.setCategoria("Romance");
+        livroResponse.setEditora("Editora X");
+        livroResponse.setIsbn("1234567890");
+        when(livroService.atualizarLivro(any(),any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
+        mockMvc.perform(put("/livros/1").contentType(MediaType.APPLICATION_JSON).content("""
+                        {
+                          "titulo": "Dom Casmurro",
+                          "autor": "Machado de Assis",
+                          "categoria": "Romance",
+                          "editora": "Editora X",
+                          "isbn": "1234567890"
+                        }"""))
+                .andExpect(status().is(404));
+    }
 }

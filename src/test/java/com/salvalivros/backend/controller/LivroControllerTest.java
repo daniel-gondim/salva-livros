@@ -116,4 +116,17 @@ class LivroControllerTest {
                         }"""))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void deveDeletarLivroExistente() throws Exception {
+        LivroResponse livroResponse = new LivroResponse();
+        livroResponse.setAutor("Machado de Assis");
+        livroResponse.setTitulo("Dom Casmurro");
+        livroResponse.setCategoria("Romance");
+        livroResponse.setEditora("Editora X");
+        livroResponse.setIsbn("1234567890");
+        when(livroService.deletarLivro(any())).thenReturn(livroResponse);
+        mockMvc.perform(delete("/livros/1"))
+                .andExpect(status().isOk());
+    }
 }

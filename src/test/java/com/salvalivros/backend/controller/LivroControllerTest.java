@@ -129,4 +129,11 @@ class LivroControllerTest {
         mockMvc.perform(delete("/livros/1"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void deveLancarExecaoQuandoLivroInexistente() throws Exception {
+        when(livroService.deletarLivro(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+        mockMvc.perform(delete("/livros/1"))
+                .andExpect(status().isNotFound());
+    }
 }

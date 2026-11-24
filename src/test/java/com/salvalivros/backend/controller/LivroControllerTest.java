@@ -78,16 +78,9 @@ class LivroControllerTest {
 
     @Test
     void deveLancarExcecaoQuandoIdForInexistente() throws Exception {
-        LivroResponse livroResponse = new LivroResponse();
-        livroResponse.setAutor("Machado de Assis");
-        livroResponse.setTitulo("Dom Casmurro");
-        livroResponse.setCategoria("Romance");
-        livroResponse.setEditora("Editora X");
-        livroResponse.setIsbn("1234567890");
-
         when(livroService.obterLivroPorId(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
         mockMvc.perform(get("/livros/1"))
-                .andExpect(status().is(404));
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -112,12 +105,6 @@ class LivroControllerTest {
 
     @Test
     void deveLancarExcecaoQuandoIdDeLivroAtualizadoInexistente() throws Exception{
-        LivroResponse livroResponse = new LivroResponse();
-        livroResponse.setAutor("Machado de Assis");
-        livroResponse.setTitulo("Dom Casmurro");
-        livroResponse.setCategoria("Romance");
-        livroResponse.setEditora("Editora X");
-        livroResponse.setIsbn("1234567890");
         when(livroService.atualizarLivro(any(),any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
         mockMvc.perform(put("/livros/1").contentType(MediaType.APPLICATION_JSON).content("""
                         {
@@ -127,6 +114,6 @@ class LivroControllerTest {
                           "editora": "Editora X",
                           "isbn": "1234567890"
                         }"""))
-                .andExpect(status().is(404));
+                .andExpect(status().isNotFound());
     }
 }

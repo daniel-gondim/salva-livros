@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
 @WebMvcTest(LivroController.class)
 class LivroControllerTest {
     @MockitoBean
@@ -26,14 +25,20 @@ class LivroControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Test
-    void deveCriarLivroQuandoDadosValidos() throws Exception {
+    private LivroResponse criaLivroResponse() {
         LivroResponse livroResponse = new LivroResponse();
         livroResponse.setAutor("Machado de Assis");
         livroResponse.setTitulo("Dom Casmurro");
         livroResponse.setCategoria("Romance");
         livroResponse.setEditora("Editora X");
         livroResponse.setIsbn("1234567890");
+        return livroResponse;
+    }
+
+
+    @Test
+    void deveCriarLivroQuandoDadosValidos() throws Exception {
+        LivroResponse livroResponse = criaLivroResponse();
 
         when(livroService.salvarLivro(any())).thenReturn(livroResponse);
         mockMvc.perform(post("/livros").contentType(MediaType.APPLICATION_JSON).content("""
@@ -49,7 +54,7 @@ class LivroControllerTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoCampoAusente() throws Exception {
+    void deveLancarExcecaoQuandoTituloAusente() throws Exception {
         mockMvc.perform(post("/livros").contentType(MediaType.APPLICATION_JSON).content("""
                         {
                           "titulo": "",
@@ -63,34 +68,24 @@ class LivroControllerTest {
 
     @Test
     void deveRetornarLivroQuandoIdForValido() throws Exception {
-        LivroResponse livroResponse = new LivroResponse();
-        livroResponse.setAutor("Machado de Assis");
-        livroResponse.setTitulo("Dom Casmurro");
-        livroResponse.setCategoria("Romance");
-        livroResponse.setEditora("Editora X");
-        livroResponse.setIsbn("1234567890");
+        LivroResponse livroResponse = criaLivroResponse();
 
         when(livroService.obterLivroPorId(any())).thenReturn(livroResponse);
         mockMvc.perform(get("/livros/1"))
-                .andExpect(status().is(200))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.autor").value("Machado de Assis"));
     }
 
     @Test
-    void deveLancarExcecaoQuandoIdForInexistente() throws Exception {
+    void deveRetornar404QuandoIdForInexistente() throws Exception {
         when(livroService.obterLivroPorId(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
         mockMvc.perform(get("/livros/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void deveAtualizarLivroQuandoDadosValidos() throws Exception{
-        LivroResponse livroResponse = new LivroResponse();
-        livroResponse.setAutor("Machado de Assis");
-        livroResponse.setTitulo("Dom Casmurro");
-        livroResponse.setCategoria("Romance");
-        livroResponse.setEditora("Editora X");
-        livroResponse.setIsbn("1234567890");
+    void deveAtualizarLivroQuandoDadosValidos() throws Exception {
+        LivroResponse livroResponse = criaLivroResponse();
         when(livroService.atualizarLivro(any(), any())).thenReturn(livroResponse);
         mockMvc.perform(put("/livros/1").contentType(MediaType.APPLICATION_JSON).content("""
                         {
@@ -104,8 +99,8 @@ class LivroControllerTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoIdDeLivroAtualizadoInexistente() throws Exception{
-        when(livroService.atualizarLivro(any(),any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
+    void deveRetornar404QuandoIdDeLivroAtualizadoInexistente() throws Exception {
+        when(livroService.atualizarLivro(any(), any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
         mockMvc.perform(put("/livros/1").contentType(MediaType.APPLICATION_JSON).content("""
                         {
                           "titulo": "Dom Casmurro",
@@ -119,19 +114,14 @@ class LivroControllerTest {
 
     @Test
     void deveDeletarLivroExistente() throws Exception {
-        LivroResponse livroResponse = new LivroResponse();
-        livroResponse.setAutor("Machado de Assis");
-        livroResponse.setTitulo("Dom Casmurro");
-        livroResponse.setCategoria("Romance");
-        livroResponse.setEditora("Editora X");
-        livroResponse.setIsbn("1234567890");
+        LivroResponse livroResponse = criaLivroResponse();
         when(livroService.deletarLivro(any())).thenReturn(livroResponse);
         mockMvc.perform(delete("/livros/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deveLancarExecaoQuandoLivroInexistente() throws Exception {
+    void deveRetornar404QuandoLivroInexistente() throws Exception {
         when(livroService.deletarLivro(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
         mockMvc.perform(delete("/livros/1"))
                 .andExpect(status().isNotFound());
